@@ -12,10 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     if ($accion == 'agregar') {
         $id_herramienta = $_POST['id_herramienta'];
-        $profesor = $_POST['profesor'];
+        $profesor = $_POST['profesor_id'];
         $fecha_prestamo = $_POST['fecha_prestamo'];
 
-        $stmt = $conexion->prepare("INSERT INTO prestamos (id_herramienta, profesor, fecha_prestamo) VALUES (?, ?, ?)");
+        $stmt = $conexion->prepare("INSERT INTO prestamos (id_herramienta, profesor_id, fecha_prestamo) VALUES (?, ?, ?)");
         $stmt->bind_param("iss", $id_herramienta, $profesor, $fecha_prestamo);
         $stmt->execute();
     } elseif ($accion == 'eliminar') {
@@ -25,6 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->execute();
     }
 }
+
+// Obtener la lista de profesores
+$profesores = $conexion->query("SELECT * FROM profesores");
 
 // Obtener lista de préstamos
 $prestamos = $conexion->query("SELECT prestamos.id, herramientas.nombre, prestamos.profesor, prestamos.fecha_prestamo, prestamos.fecha_devolucion FROM prestamos JOIN herramientas ON prestamos.id_herramienta = herramientas.id");
@@ -52,13 +55,26 @@ $herramientas = $conexion->query("SELECT * FROM herramientas");
         </select><br>
 
         <label for="profesor">Profesor:</label>
-        <input type="text" name="profesor" required><br>
+        <select name="profesor_id" required>
+            <?php while ($profesor = $profesores->fetch_assoc()) { ?>
+                <option value="<?php echo $profesor['id']; ?>"><?php echo $profesor['nombre']; ?></option>
+            <?php } ?>
+        </select><br>
+
+        <!--<label for="profesor">Profesor:</label>
+        <input type="text" name="profesor" required><br> -->
 
         <label for="fecha_prestamo">Fecha de Préstamo:</label>
         <input type="date" name="fecha_prestamo" required><br>
 
         <button type="submit">Agregar Préstamo</button>
     </form>
+   
+    <!-- Agrega un enlace desde la página principal de préstamos para navegar a la página de gestión de herramientas -->
+    <a href="herramientas.php">Gestionar Herramientas</a> | <a href="logout.php">Cerrar Sesión</a>
+
+    <a href="profesores.php">Gestionar Profesores</a>
+
 
     <!-- Listado de préstamos -->
     <h3>Lista de Préstamos</h3>
@@ -73,7 +89,7 @@ $herramientas = $conexion->query("SELECT * FROM herramientas");
         <?php while ($prestamo = $prestamos->fetch_assoc()) { ?>
             <tr>
                 <td><?php echo $prestamo['nombre']; ?></td>
-                <td><?php echo $prestamo['profesor']; ?></td>
+                <td><?php echo $prestamo['profesor']; ?></td>  <!-- modifico profesor por profesor_id -->
                 <td><?php echo $prestamo['fecha_prestamo']; ?></td>
                 <td><?php echo $prestamo['fecha_devolucion'] ?: 'No devuelto'; ?></td>
                 <td>
