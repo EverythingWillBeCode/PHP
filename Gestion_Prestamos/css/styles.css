@@ -1,0 +1,53 @@
+/* Aplicamos la fuente Verdana en todo el documento */
+body {
+    font-family: Verdana, sans-serif;
+    background-color: #f0f0f0; /* Gris claro */
+    color: #333; /* Gris oscuro para el texto */
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    height: 100vh; /* Ocupa toda la altura de la ventana */
+    margin: 0;
+}
+
+/* Estilo para el contenedor del formulario */
+form {
+    background-color: #ffffff; /* Fondo blanco */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+}
+
+/* Estilo de los elementos del formulario */
+label, input, button {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #ff9999; /* Rojo claro */
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #ff6666; /* Rojo más intenso al pasar el mouse */
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #ff6666; /* Rojo claro para el título */
+    text-align: center;
+}
