@@ -29,22 +29,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/styles.css">
-    
     <title>Iniciar Sesión</title>
+    <!-- Referencia a la hoja de estilos externa -->
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <h2>Iniciar Sesión</h2>
-    <form method="POST" action="login.php">
-        <label for="nombre_usuario">Nombre de usuario:</label>
-        <input type="text" name="nombre_usuario" required><br>
+    <div class="login-container">
+        <!-- Imagen agregada por encima del título -->
+        <img src="img/logoCFP.png" alt="Logo de CFP-401" class="login-logo">
+        <h2>Iniciar Sesión</h2>
+        <form method="POST" action="login.php">
+            <label for="nombre_usuario">Nombre de usuario:</label>
+            <input type="text" name="nombre_usuario" required>
 
-        <label for="contrasena">Contraseña:</label>
-        <input type="password" name="contrasena" required><br>
+            <label for="contrasena">Contraseña:</label>
+            <input type="password" name="contrasena" required>
 
-        <button type="submit">Ingresar</button>
-    </form>
+            <button type="submit">Ingresar</button>
+        </form>
+    </div>
 </body>
 </html>

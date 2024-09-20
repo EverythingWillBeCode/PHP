@@ -38,71 +38,74 @@ $herramientas = $conexion->query("SELECT * FROM herramientas");
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Préstamos</title>
+    <!-- Referencia a la hoja de estilos externa -->
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <h2>Gestión de Préstamos</h2>
+    <div class="loan-management-container">
+        <!-- Título principal -->
+        <h2>Gestión de Préstamos</h2>
 
-    <!-- Formulario para agregar nuevo préstamo -->
-    <form method="POST" action="prestamos.php">
-        <input type="hidden" name="accion" value="agregar">
+        <!-- Formulario para agregar nuevo préstamo -->
+        <form method="POST" action="prestamos.php">
+            <input type="hidden" name="accion" value="agregar">
 
-        <label for="id_herramienta">Herramienta:</label>
-        <select name="id_herramienta" required>
-            <?php while ($herramienta = $herramientas->fetch_assoc()) { ?>
-                <option value="<?php echo $herramienta['id']; ?>"><?php echo $herramienta['nombre']; ?></option>
-            <?php } ?>
-        </select><br>
+            <label for="id_herramienta">Herramienta:</label>
+            <select name="id_herramienta" required>
+                <?php while ($herramienta = $herramientas->fetch_assoc()) { ?>
+                    <option value="<?php echo $herramienta['id']; ?>"><?php echo $herramienta['nombre']; ?></option>
+                <?php } ?>
+            </select><br>
 
-        <label for="profesor">Profesor:</label>
-        <select name="profesor_id" required>
-            <?php while ($profesor = $profesores->fetch_assoc()) { ?>
-                <option value="<?php echo $profesor['id']; ?>"><?php echo $profesor['nombre']; ?></option>
-            <?php } ?>
-        </select><br>
+            <label for="profesor">Profesor:</label>
+            <select name="profesor_id" required>
+                <?php while ($profesor = $profesores->fetch_assoc()) { ?>
+                    <option value="<?php echo $profesor['id']; ?>"><?php echo $profesor['nombre']; ?></option>
+                <?php } ?>
+            </select><br>
 
-        <!--<label for="profesor">Profesor:</label>
-        <input type="text" name="profesor" required><br> -->
+            <label for="fecha_prestamo">Fecha de Préstamo:</label>
+            <input type="date" name="fecha_prestamo" required><br>
 
-        <label for="fecha_prestamo">Fecha de Préstamo:</label>
-        <input type="date" name="fecha_prestamo" required><br>
+            <button type="submit">Agregar Préstamo</button>
+        </form>
 
-        <button type="submit">Agregar Préstamo</button>
-    </form>
-   
-    <!-- Agrega un enlace desde la página principal de préstamos para navegar a la página de gestión de herramientas -->
-    <a href="herramientas.php">Gestionar Herramientas</a> | <a href="logout.php">Cerrar Sesión</a>
+        <!-- Enlaces para gestionar herramientas y profesores -->
+        <div class="links">
+            <a href="herramientas.php">Gestionar Herramientas</a> |
+            <a href="profesores.php">Gestionar Profesores</a> |
+            <a href="logout.php">Cerrar Sesión</a>
+        </div>
 
-    <a href="profesores.php">Gestionar Profesores</a>
-
-
-    <!-- Listado de préstamos -->
-    <h3>Lista de Préstamos</h3>
-    <table border="1">
-        <tr>
-            <th>Herramienta</th>
-            <th>Profesor</th>
-            <th>Fecha de Préstamo</th>
-            <th>Fecha de Devolución</th>
-            <th>Acciones</th>
-        </tr>
-        <?php while ($prestamo = $prestamos->fetch_assoc()) { ?>
+        <!-- Listado de préstamos -->
+        <h3>Lista de Préstamos</h3>
+        <table>
             <tr>
-                <td><?php echo $prestamo['nombre']; ?></td>
-                <td><?php echo $prestamo['profesor_nombre']; ?></td>  <!--V1- modifico profesor por profesor_id --> <!--V2- modifico profesor_id por profesores.nombre -->
-                <td><?php echo $prestamo['fecha_prestamo']; ?></td>
-                <td><?php echo $prestamo['fecha_devolucion'] ?: 'No devuelto'; ?></td>
-                <td>
-                    <form method="POST" action="prestamos.php">
-                        <input type="hidden" name="id" value="<?php echo $prestamo['id']; ?>">
-                        <input type="hidden" name="accion" value="eliminar">
-                        <button type="submit">Eliminar</button>
-                    </form>
-                </td>
+                <th>Herramienta</th>
+                <th>Profesor</th>
+                <th>Fecha de Préstamo</th>
+                <th>Fecha de Devolución</th>
+                <th>Acciones</th>
             </tr>
-        <?php } ?>
-    </table>
-
-    <a href="logout.php">Cerrar Sesión</a>
+            <?php while ($prestamo = $prestamos->fetch_assoc()) { ?>
+                <tr>
+                    <td><?php echo $prestamo['nombre']; ?></td>
+                    <td><?php echo $prestamo['profesor_nombre']; ?></td>
+                    <td><?php echo $prestamo['fecha_prestamo']; ?></td>
+                    <td><?php echo $prestamo['fecha_devolucion'] ?: 'No devuelto'; ?></td>
+                    <td>
+                        <form method="POST" action="prestamos.php">
+                            <input type="hidden" name="id" value="<?php echo $prestamo['id']; ?>">
+                            <input type="hidden" name="accion" value="eliminar">
+                            <button type="submit">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            <?php } ?>
+        </table>
+    </div>
 </body>
 </html>
+
