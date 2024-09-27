@@ -75,6 +75,7 @@ $herramientas = $conexion->query("SELECT * FROM herramientas");
         <!-- Enlaces para gestionar herramientas y profesores -->
         <div class="links">
             <a href="herramientas.php">Gestionar Herramientas</a> |
+            <a href="seguimiento_herramienta.php">Seguimiento de Herramientas</a> |
             <a href="profesores.php">Gestionar Profesores</a> |
             <a href="logout.php">Cerrar Sesión</a>
         </div>
