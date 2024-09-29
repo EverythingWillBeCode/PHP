@@ -54,8 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id_herramienta'])) {
             <tr>
                 <th>Herramienta</th>
                 <th>Profesor</th>
-                <th>Fecha de Préstamo</th>
-                <th>Fecha de Devolución</th>
+                <th>Fecha y hora de Préstamo</th>
+                <th>Fecha y hora de Devolución</th>
             </tr>
             <?php while ($prestamo = $prestamos_herramienta->fetch_assoc()) { ?>
                 <tr>

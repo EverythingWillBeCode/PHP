@@ -7,21 +7,28 @@ if (!isset($_SESSION['usuario'])) {
     exit();
 }
 
+// Obtener el nombre del usuario logueado
+$usuario_logueado = $_SESSION['usuario'];
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $accion = $_POST['accion'];
-    
+
     if ($accion == 'agregar') {
         $id_herramienta = $_POST['id_herramienta'];
         $profesor = $_POST['profesor_id'];
         $fecha_prestamo = $_POST['fecha_prestamo'];
 
-        $stmt = $conexion->prepare("INSERT INTO prestamos (id_herramienta, profesor_id, fecha_prestamo) VALUES (?, ?, ?)");
-        $stmt->bind_param("iss", $id_herramienta, $profesor, $fecha_prestamo); //-- modifico profesor por profesor_id -->
+        // Incluir el usuario que está realizando el préstamo
+        $stmt = $conexion->prepare("INSERT INTO prestamos (id_herramienta, profesor_id, fecha_prestamo, usuario_prestamo) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("isss", $id_herramienta, $profesor, $fecha_prestamo, $usuario_logueado);
         $stmt->execute();
-    } elseif ($accion == 'eliminar') {
+    } elseif ($accion == 'devolver') {
         $id = $_POST['id'];
-        $stmt = $conexion->prepare("DELETE FROM prestamos WHERE id = ?");
-        $stmt->bind_param("i", $id);
+        $fecha_actual = date('Y-m-d H:i:s');  // Captura la fecha y hora actual
+
+        // Actualiza la fecha de devolución con la fecha actual
+        $stmt = $conexion->prepare("UPDATE prestamos SET fecha_devolucion = ? WHERE id = ?");
+        $stmt->bind_param("si", $fecha_actual, $id);
         $stmt->execute();
     }
 }
@@ -29,8 +36,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 // Obtener la lista de profesores
 $profesores = $conexion->query("SELECT * FROM profesores");
 
-// Obtener lista de préstamos                                                   //V1-modificio profesor por profesor_id //V2-modifico prestamos.profesor_id por profesores.nombre                                                                                                                       //Agrego JOIN             
-$prestamos = $conexion->query("SELECT prestamos.id, herramientas.nombre, profesores.nombre as profesor_nombre, prestamos.fecha_prestamo, prestamos.fecha_devolucion FROM prestamos JOIN herramientas ON prestamos.id_herramienta = herramientas.id JOIN profesores ON prestamos.profesor_id = profesores.id");
+// Obtener lista de préstamos con un JOIN a las tablas herramientas, profesores y filtrado por usuario
+// Solo mostrar préstamos no devueltos (fecha_devolucion es NULL) y ordenarlos por el más reciente
+$prestamos = $conexion->query("
+    SELECT prestamos.id, herramientas.nombre, profesores.nombre as profesor_nombre, prestamos.fecha_prestamo, prestamos.fecha_devolucion, prestamos.usuario_prestamo
+    FROM prestamos 
+    JOIN herramientas ON prestamos.id_herramienta = herramientas.id 
+    JOIN profesores ON prestamos.profesor_id = profesores.id
+    WHERE prestamos.fecha_devolucion IS NULL
+    ORDER BY prestamos.fecha_prestamo DESC
+");
+
 $herramientas = $conexion->query("SELECT * FROM herramientas");
 ?>
 
@@ -40,12 +56,10 @@ $herramientas = $conexion->query("SELECT * FROM herramientas");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Préstamos</title>
-    <!-- Referencia a la hoja de estilos externa -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <div class="loan-management-container">
-        <!-- Título principal -->
         <h2>Gestión de Préstamos</h2>
 
         <!-- Formulario para agregar nuevo préstamo -->
@@ -65,9 +79,10 @@ $herramientas = $conexion->query("SELECT * FROM herramientas");
                     <option value="<?php echo $profesor['id']; ?>"><?php echo $profesor['nombre']; ?></option>
                 <?php } ?>
             </select><br>
-
-            <label for="fecha_prestamo">Fecha de Préstamo:</label>
-            <input type="date" name="fecha_prestamo" required><br>
+            
+            <!-- Cambiar a un campo de tipo 'datetime-local' para incluir hora -->
+            <label for="fecha_prestamo">Fecha y Hora de Préstamo:</label>
+            <input type="datetime-local" name="fecha_prestamo" required><br>
 
             <button type="submit">Agregar Préstamo</button>
         </form>
@@ -86,8 +101,8 @@ $herramientas = $conexion->query("SELECT * FROM herramientas");
             <tr>
                 <th>Herramienta</th>
                 <th>Profesor</th>
-                <th>Fecha de Préstamo</th>
-                <th>Fecha de Devolución</th>
+                <th>Fecha y Hora de Préstamo</th>
+                <th>Usuario que realizó el préstamo</th>
                 <th>Acciones</th>
             </tr>
             <?php while ($prestamo = $prestamos->fetch_assoc()) { ?>
@@ -95,12 +110,13 @@ $herramientas = $conexion->query("SELECT * FROM herramientas");
                     <td><?php echo $prestamo['nombre']; ?></td>
                     <td><?php echo $prestamo['profesor_nombre']; ?></td>
                     <td><?php echo $prestamo['fecha_prestamo']; ?></td>
-                    <td><?php echo $prestamo['fecha_devolucion'] ?: 'No devuelto'; ?></td>
+                    <td><?php echo $prestamo['usuario_prestamo']; ?></td>
                     <td>
+                        <!-- Cambiar el botón de eliminar a devolver -->
                         <form method="POST" action="prestamos.php">
                             <input type="hidden" name="id" value="<?php echo $prestamo['id']; ?>">
-                            <input type="hidden" name="accion" value="eliminar">
-                            <button type="submit">Eliminar</button>
+                            <input type="hidden" name="accion" value="devolver">
+                            <button type="submit">Devolver</button>
                         </form>
                     </td>
                 </tr>
@@ -109,4 +125,3 @@ $herramientas = $conexion->query("SELECT * FROM herramientas");
     </div>
 </body>
 </html>
-
