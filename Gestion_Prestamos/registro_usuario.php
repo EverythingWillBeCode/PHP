@@ -15,18 +15,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Usuario</title>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <h2>Registro de Usuario</h2>
-    <form method="POST" action="registro_usuario.php">
-        <label for="nombre_usuario">Nombre de usuario:</label>
-        <input type="text" name="nombre_usuario" required><br>
+    <div class="login-container">
+        <img src="img/logoCFP.png" alt="Logo de CFP-401" class="login-logo">
+        <h2>Registro de Usuario</h2>
 
-        <label for="contrasena">Contraseña:</label>
-        <input type="password" name="contrasena" required><br>
+        <form method="POST" action="registro_usuario.php">
+            <label for="nombre_usuario">Nombre de usuario:</label>
+            <input type="text" name="nombre_usuario" required><br>
 
-        <button type="submit">Registrar</button>
-    </form>
+            <label for="contrasena">Contraseña:</label>
+            <input type="password" name="contrasena" required><br>
+
+            <button type="submit">Registrar</button>
+        </form>
+    </div>
 </body>
 </html>
