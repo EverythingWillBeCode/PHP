@@ -1,0 +1,93 @@
+/* estilos.css */
+
+/* Estilos generales */
+body {
+    font-family: Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #e0f7ff; /* Celeste claro */
+    color: #002f6c; /* Azul oscuro */
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilo de contenedor principal */
+.container {
+    max-width: 600px;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    background-color: #ffffff; /* Fondo blanco */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 47, 108, 0.2);
+    margin-top: 50px;
+}
+
+h2 {
+    font-size: 24px;
+    color: #004aad; /* Azul más intenso */
+}
+
+p {
+    font-size: 16px;
+    color: #005bb5;
+}
+
+/* Estilo para el menú de gestión en Flexbox */
+.menu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 0;
+    list-style: none;
+    margin: 20px 0;
+}
+
+/* Estilo para cada opción de menú */
+.menu-item {
+    width: 100px;
+    text-align: center;
+    margin: 10px;
+    transition: transform 0.2s;
+}
+
+.menu-item img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    transition: opacity 0.2s;
+}
+
+.menu-item a {
+    text-decoration: none;
+    color: #005bb5;
+    font-weight: bold;
+}
+
+.menu-item:hover {
+    transform: scale(1.05);
+}
+
+.menu-item:hover img {
+    opacity: 0.8;
+}
+
+/* Botón de cierre de sesión */
+.logout {
+    color: #004aad;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 15px;
+    display: inline-block;
+    padding: 8px 16px;
+    border: 2px solid #004aad;
+    border-radius: 4px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.logout:hover {
+    background-color: #004aad;
+    color: white;
+}

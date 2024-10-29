@@ -3,17 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="css/estilos.css"> <!-- Ruta a los estilos CSS -->
 </head>
 <body>
-    <h2>Iniciar Sesión</h2>
-    <form action="login.php" method="POST">
-        <label for="username">Usuario:</label>
-        <input type="text" id="username" name="username" required>
-        
-        <label for="password">Contraseña:</label>
-        <input type="password" id="password" name="password" required>
-        
-        <button type="submit">Iniciar Sesión</button>
-    </form>
+    <!-- Contenedor principal -->
+    <div class="container">
+        <!-- Encabezado con logo -->
+        <header class="header">
+            <img src="images/logo_institucion.png" alt="Logo de la Institución" class="logo">
+            <h2>Iniciar Sesión</h2>
+        </header>
+
+        <!-- Formulario de inicio de sesión -->
+        <form action="login.php" method="POST" class="login-form">
+            <label for="username">Usuario:</label>
+            <input type="text" id="username" name="username" required>
+            
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required>
+            
+            <button type="submit">Iniciar Sesión</button>
+        </form>
+    </div>
 </body>
 </html>
